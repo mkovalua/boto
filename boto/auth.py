@@ -68,6 +68,8 @@ SIGV4_DETECT = [
     '.ca-central',
     '.eu-west-2',
     '-eu-west-2',
+    '.eu-west-3',
+    '-eu-west-3',
 ]
 
 
