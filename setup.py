@@ -28,7 +28,6 @@ from __future__ import print_function
 try:
     from setuptools import setup
     extra = dict(test_suite="tests.test.suite", include_package_data=True)
-    extra["install_requires"] = ["six>=1.16.0"]
 except ImportError:
     from distutils.core import setup
     extra = {}
@@ -101,5 +100,6 @@ setup(name = "boto",
                      "Programming Language :: Python :: 3",
                      "Programming Language :: Python :: 3.3",
                      "Programming Language :: Python :: 3.4"],
+      install_requires=['six'],
       **extra
       )
