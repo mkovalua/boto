@@ -37,8 +37,9 @@ The actual interface is duck typed.
 """
 
 import glob
-import imp
 import os.path
+import importlib.util
+import os
 
 
 class Plugin(object):
@@ -67,15 +68,18 @@ def get_plugin(cls, requested_capability=None):
 
 
 def _import_module(filename):
-    (path, name) = os.path.split(filename)
-    (name, ext) = os.path.splitext(name)
+    path, name = os.path.split(filename)
+    name, ext = os.path.splitext(name)
+    module_path = os.path.join(path, f"{name}.py")
 
-    (file, filename, data) = imp.find_module(name, [path])
-    try:
-        return imp.load_module(name, file, filename, data)
-    finally:
-        if file:
-            file.close()
+    spec = importlib.util.spec_from_file_location(name, module_path)
+    if spec and spec.loader:
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+    else:
+        raise ImportError(f"Cannot import module {name} from {module_path}")
+
 
 _plugin_loaded = False
 
