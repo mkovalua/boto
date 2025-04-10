@@ -33,8 +33,16 @@ except ImportError:
     extra = {}
 
 import sys
+import os
 
-from boto import __version__
+def get_version():
+    with open(os.path.join("boto", "__init__.py")) as f:
+        for line in f:
+            if line.startswith("__version__"):
+                delim = '"' if '"' in line else "'"
+                return line.split(delim)[1]
+
+__version__ = get_version()
 
 if sys.version_info <= (2, 5):
     error = "ERROR: boto requires Python Version 2.6 or above...exiting."
